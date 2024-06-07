@@ -46,7 +46,10 @@ def load_plbert(log_dir, config_path=None, checkpoint_path=None):
         if name.startswith('encoder.'):
             name = name[8:] # remove `encoder.`
             new_state_dict[name] = v
-    del new_state_dict["embeddings.position_ids"]
+    try:
+        del new_state_dict["embeddings.position_ids"]
+    except KeyError:
+        pass
     bert.load_state_dict(new_state_dict, strict=False)
     
     return bert
